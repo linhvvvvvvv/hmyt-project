@@ -1,0 +1,27 @@
+FAERS 2025 - Baseline Logistic Regression
+Dinh nghia nhan: bao cao co FALL / khong bao cao FALL, KHONG phai nguy co te nga lam sang.
+Features: age_years, sex, n_unique_meds; bo ACB va DDI (chua tinh).
+Tach 80/20 theo caseid; neu case trung phien ban, giu caseversion cao nhat.
+Can kiem tra nhan va phuong phap xu ly duplicate truoc khi cong bo khoa hoc.
+
+Tong case: 342,948
+Train: 274,358
+Test: 68,590
+FALL=1 overall: 10,499 (3.06%)
+FALL=1 test: 1,986 (2.90%)
+ROC-AUC: 0.6291
+Average precision (PR-AUC summary/AP): 0.0551
+Test prevalence (AP random baseline): 0.0290
+
+              precision    recall  f1-score   support
+
+           0       0.98      0.65      0.78     66604
+           1       0.04      0.52      0.08      1986
+
+    accuracy                           0.65     68590
+   macro avg       0.51      0.59      0.43     68590
+weighted avg       0.95      0.65      0.76     68590
+
+Confusion matrix [0,1]:
+[[43327 23277]
+ [  945  1041]]
