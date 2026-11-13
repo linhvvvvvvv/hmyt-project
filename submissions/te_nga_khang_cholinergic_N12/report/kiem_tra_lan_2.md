@@ -1,9 +1,9 @@
 # Bài kiểm tra lần 2 — N12 — te_nga_khang_cholinergic
 
-- Fork: [ĐIỀN URL FORK] · Nhánh: `gd5-proposed-model`
-- Thành viên (theo báo cáo W2 của nhóm; kiểm tra và bổ sung vai trò thực tế):
-  - Nguyễn Ngọc Anh -
-  - Vũ Hoàng Linh - 
+- Fork: https://github.com/linhvvvvvvv/hmyt-project · Nhánh: `gd5-proposed-model`
+- Thành viên và phân công:
+  - NNA - 20233727 - Literature Review, tổng hợp tài liệu và viết báo cáo.
+  - VHL - 20233775 - Xử lý dữ liệu FAERS, xây dựng baseline Logistic Regression, chuẩn hóa thuốc và RxNorm.
 
 ## A. Literature Review và research gaps
 
@@ -11,7 +11,7 @@
 
 **Mục đích:** Tìm nghiên cứu trả lời ba vấn đề: (1) mô hình ML phân biệt/dự đoán té ngã ở người cao tuổi; (2) số thuốc và gánh nặng kháng cholinergic liên quan thế nào đến té ngã; (3) có thể dùng thông tin thuốc và cảnh báo để hỗ trợ đánh giá người bệnh không.
 
-**Nguồn và phạm vi:** Rà soát PubMed và Google Scholar ngày **09/11/2026**; đối chiếu DOI/toàn văn trên trang nhà xuất bản hoặc PubMed Central. Các lượt truy vấn dùng bộ lọc 5 năm (PubMed) và phạm vi năm do người tìm chọn (Google Scholar). Đây là **lượt kiểm tra lại**, không phải nhật ký các lần tìm tài liệu trước đó.
+**Nguồn và phạm vi:** Rà soát PubMed và Google Scholar trong tháng 11/2026; đối chiếu DOI/toàn văn trên trang nhà xuất bản hoặc PubMed Central. Các lượt truy vấn dùng bộ lọc 5 năm (PubMed) và phạm vi năm do người tìm chọn (Google Scholar). Đây là **lượt kiểm tra lại**, không phải nhật ký các lần tìm tài liệu trước đó.
 
 | Nguồn | Từ khóa / truy vấn rà soát | Khoảng năm / bộ lọc | Số kết quả | Số bài giữ lại |
 |---|---|---|---:|---|
@@ -94,22 +94,33 @@ Các khoảng trống dưới đây rút ra từ **10 bài trong A2**, không kh
 
 | Mô hình | Tập đánh giá (cách chia, n) | Metric chính (giá trị, 95% CI nếu có) | Metric phụ | Nguồn số liệu (file/notebook/W&B) |
 |---|---|---|---|---|
-| **Baseline 1 — Logistic Regression** (tuổi, giới tính, số loại thuốc khác nhau) | Tập dữ liệu **342.948** báo cáo; train **274.358**, test **68.590**; chia 80/20 theo `caseid` sau khi chọn phiên bản mới nhất | **ROC-AUC = 0,6291**; **95% CI chưa tính** | **AP = 0,0551**; test có **1.986 FALL** (~2,90%); precision FALL khoảng **0,04**, recall khoảng **0,52** ở ngưỡng đã sử dụng | **Tệp từ lần chạy baseline trước (cần đối chiếu trên máy và đưa lên repo):** `chay_baseline.py`; `BASELINE_KET_QUA/bao_cao_baseline.txt`; `BASELINE_KET_QUA/du_doan_test.csv`; `BASELINE_KET_QUA/confusion_matrix.png`. **Chưa có link GitHub nên chưa xác minh trực tiếp output**. |
+| **Baseline 1 — Logistic Regression** (tuổi, giới tính, số loại thuốc khác nhau) | Tập dữ liệu **342.948** báo cáo; train **274.358**, test **68.590**; chia 80/20 theo `caseid` sau khi chọn phiên bản mới nhất | **ROC-AUC = 0,6291**; **95% CI chưa tính** | **AP = 0,0551**; test có **1.986 FALL** (~2,90%); precision FALL khoảng **0,04**, recall khoảng **0,52** ở ngưỡng đã sử dụng | [Code Logistic Regression](../code/chay_baseline.py); [Báo cáo baseline](../results/bao_cao_baseline.txt); [Dự đoán test](../results/du_doan_test.csv); [Ma trận nhầm lẫn](../results/confusion_matrix.png). |
 | **Mô hình đề xuất — baseline + ACB + DDI** | Chưa chạy đánh giá cuối trên tập test | **Chưa có ROC-AUC / CI** | Chưa có AP/recall đã kiểm chứng | Đang chuẩn bị thông tin thuốc; **chưa có output mô hình kết hợp**. |
 
 **Các công việc đã có code, nhưng không phải bằng chứng cho ROC-AUC baseline:**
 
-- **Bước tách hoạt chất:** Code đọc `FAERS_2025_65plus_medications.csv`, tạo `KET_QUA_TACH_THUOC/01_MOI_DONG_THUOC_TACH_HOAT_CHAT.csv`, `02_DANH_MUC_HOAT_CHAT_CAN_XAC_MINH.csv`, `03_CHUA_RO_HOAT_CHAT.csv`, `04_MOI_HO_SO_MOI_HOAT_CHAT_KHONG_TRUNG.csv`. Code tách tên/hoạt chất sơ bộ, **chưa gán điểm ACB**.
-- **Bước tra RxNorm:** Code đọc `02_DANH_MUC_HOAT_CHAT_CAN_XAC_MINH.csv`, gọi RxNorm API và xuất `RXNORM_KET_QUA/01_KET_QUA_DANH_MUC.csv`, `02_CAN_KIEM_TRA.csv`, `03_DA_KHOP_RXNORM.csv`. Các tên khớp vẫn cần kiểm tra chất lượng; các cột `ACB_2012` và `ACB_source` đang để trống trong code.
+- **Bước tách hoạt chất:** [Code tách hoạt chất](../code/tach_hoat_chat_csv.py) đọc `FAERS_2025_65plus_medications.csv`, tạo `KET_QUA_TACH_THUOC/01_MOI_DONG_THUOC_TACH_HOAT_CHAT.csv`, `02_DANH_MUC_HOAT_CHAT_CAN_XAC_MINH.csv`, `03_CHUA_RO_HOAT_CHAT.csv`, `04_MOI_HO_SO_MOI_HOAT_CHAT_KHONG_TRUNG.csv`. Code tách tên/hoạt chất sơ bộ, **chưa gán điểm ACB**.
+- **Bước tra RxNorm:** [Code RxNorm](../code/xac_minh_rxnorm.py) đọc `02_DANH_MUC_HOAT_CHAT_CAN_XAC_MINH.csv`, gọi RxNorm API và xuất `RXNORM_KET_QUA/01_KET_QUA_DANH_MUC.csv`, `02_CAN_KIEM_TRA.csv`, `03_DA_KHOP_RXNORM.csv`. Các tên khớp vẫn cần kiểm tra chất lượng; các cột `ACB_2012` và `ACB_source` đang để trống trong code.
 - **Chưa có bằng chứng đã hoàn thành:** Xác minh toàn bộ tên thuốc, tính ACB cho từng báo cáo, tạo biến DDI, hoặc chạy mô hình kết hợp ACB + DDI.
 
-**Bằng chứng B1 cần đưa lên fork:** (1) `chay_baseline.py` — script huấn luyện Logistic Regression; (2) `BASELINE_KET_QUA/bao_cao_baseline.txt` — số liệu đánh giá; (3) `BASELINE_KET_QUA/du_doan_test.csv` — các cột `caseid`, `y_true`, `prob_fall_reported`, `y_pred_0_5`; (4) `BASELINE_KET_QUA/confusion_matrix.png` — ma trận nhầm lẫn. Đây là **tên file đã được dùng trong lần làm baseline trước**, nhưng chưa có các file thực trong cuộc trò chuyện hiện tại để mở lại, nên nhóm phải kiểm tra chúng trên máy và thêm URL repo sau khi upload. Hai script tách hoạt chất và RxNorm chỉ là bằng chứng tiến độ xử lý thuốc, không thay thế output baseline.
+
+**Bằng chứng B1 đã được lưu trên GitHub:** Nhóm đã tải lên mã nguồn và các tệp kết quả của mô hình Logistic Regression, bao gồm:
+
+(1) [Code Logistic Regression](../code/chay_baseline.py) — mã nguồn huấn luyện và đánh giá mô hình baseline.
+
+(2) [Báo cáo kết quả baseline](../results/bao_cao_baseline.txt) — ghi nhận ROC-AUC = 0,6291, Average Precision = 0,0551 cùng precision, recall, F1-score và confusion matrix.
+
+(3) [Kết quả dự đoán tập test](../results/du_doan_test.csv) — tệp lưu kết quả dự đoán trên tập kiểm tra.
+
+(4) [Ma trận nhầm lẫn](../results/confusion_matrix.png) — hình ảnh thể hiện kết quả phân loại trên tập test.
+
+Ngoài ra, nhóm đã bổ sung [code tách hoạt chất](../code/tach_hoat_chat_csv.py), [code ánh xạ RxNorm](../code/xac_minh_rxnorm.py) và các tệp [thuốc đã khớp RxNorm](../results/03_DA_KHOP_RXNORM.csv), [thuốc cần kiểm tra](../results/02_CAN_KIEM_TRA.csv) để minh chứng tiến độ chuẩn hóa dữ liệu thuốc. Các kết quả này chưa bao gồm điểm ACB 2012 và đặc trưng DDI, do đó chưa được sử dụng để đánh giá mô hình kết hợp ACB + DDI.
 
 ### B2. Ablation (Mốc 3)
 
 | Cấu hình | Metric chính | Chênh lệch so với mô hình đầy đủ | Nguồn |
 |---|---|---|---|
-| Baseline thông tin cơ bản | ROC-AUC 0,6291 (chưa xác minh output) | Chưa áp dụng — mô hình đầy đủ chưa được đánh giá | `chay_baseline.py` + `BASELINE_KET_QUA/bao_cao_baseline.txt` (cần upload và chèn URL) |
+| Baseline thông tin cơ bản | ROC-AUC 0,6291; AP 0,0551 (đã đối chiếu với báo cáo baseline) | Chưa áp dụng — mô hình đầy đủ chưa được đánh giá | [Code](../code/chay_baseline.py); [Kết quả](../results/bao_cao_baseline.txt) |
 | Baseline + ACB | Chưa chạy/không có bằng chứng kết quả | Chưa tính | Không áp dụng — chưa có output |
 | Baseline + DDI | Chưa chạy/không có bằng chứng kết quả | Chưa tính | Không áp dụng — chưa có output |
 | Baseline + ACB + DDI | Chưa chạy/không có bằng chứng kết quả | Mốc đối chiếu chưa có | Không áp dụng — chưa có output |
@@ -122,12 +133,12 @@ Baseline báo cáo ROC-AUC 0,6291 thấp hơn chỉ số công bố của Liu #3
 
 | Việc | Phụ trách (MSSV/vai trò) | Mốc | Ngày dự kiến | Trạng thái + bằng chứng |
 |---|---|---|---|---|
-| Rà nguồn/làm sạch FAERS, đối chiếu nhãn/caseid | [PHÂN CÔNG] | M3 tuần 10 | [ĐIỀN NGÀY] | Có thống kê ban đầu; thiếu script/link |
-| Hoàn tất ánh xạ tên thuốc RxNorm, kiểm tra tỷ lệ khớp | [PHÂN CÔNG] | M3 tuần 10 | [ĐIỀN NGÀY] | Đã có script tách hoạt chất và RxNorm; cần log/CSV kết quả ánh xạ và QC |
-| Tính ACB, kiểm tra độ phủ | [PHÂN CÔNG] | M3/Tuần 12 | [ĐIỀN NGÀY] | Chưa có output xác minh |
-| Chọn nguồn DDI, tính đặc trưng tương tác | [PHÂN CÔNG] | Tuần 12 | [ĐIỀN NGÀY] | Chưa có output xác minh |
-| So sánh mô hình + ablation + calibration/CI | [PHÂN CÔNG] | Tuần 12 | [ĐIỀN NGÀY] | Chưa có output xác minh |
-| Hoàn thiện báo cáo, mã nguồn, bằng chứng, README | [PHÂN CÔNG] | Final tuần 15 | [ĐIỀN NGÀY] | Chưa hoàn thành |
+| Rà nguồn/làm sạch FAERS, đối chiếu nhãn/caseid | VHL (20233775) | M3 tuần 10 | Đã thực hiện giai đoạn baseline; rà soát tiếp trong M4 | Đã có tổng hợp dữ liệu 342.948 báo cáo và [baseline](../results/bao_cao_baseline.txt); chưa có script lọc FAERS gốc trong repo |
+| Kiểm tra tên thuốc và kết quả ánh xạ RxNorm | VHL (20233775) | M3–M4 | Tuần 12 (dự kiến) | Đã có [code RxNorm](../code/xac_minh_rxnorm.py), [kết quả khớp](../results/03_DA_KHOP_RXNORM.csv) và [danh sách cần rà](../results/02_CAN_KIEM_TRA.csv); chưa hoàn tất xác minh |
+| Tính ACB 2012, đánh giá độ phủ | VHL (20233775) | M4 tuần 12 | Tuần 12 (dự kiến) | Chưa có kết quả tính ACB; cần xây bảng ánh xạ và kiểm tra tên thuốc |
+| Chọn nguồn DDI, tính đặc trưng tương tác | VHL (20233775) | M4–Final | Sau bước chuẩn hóa thuốc (chưa chốt ngày) | Chưa có output DDI; cần lựa chọn nguồn tương tác và quy tắc gán nhãn |
+| So sánh mô hình, ablation, calibration và 95% CI | VHL (20233775), NNA (20233727) phối hợp tổng hợp | M4–Final | Trước báo cáo cuối kỳ (chưa chốt ngày) | Đã có [baseline](../results/bao_cao_baseline.txt); chưa chạy mô hình ACB/DDI và đánh giá mở rộng |
+| Hoàn thiện Literature Review, báo cáo và bằng chứng GitHub | NNA (20233727), VHL (20233775) phối hợp | M3–Final tuần 15 | Trước nộp cuối kỳ (chưa chốt ngày) | Đã có báo cáo A–D và 10 bài y văn; cần hoàn thiện checklist, cập nhật README và kiểm tra liên kết |
 
 ### B5. Rủi ro / đang vướng / câu hỏi cho GV
 
@@ -144,24 +155,24 @@ Baseline báo cáo ROC-AUC 0,6291 thấp hơn chỉ số công bố của Liu #3
 |---|---|---|
 | Nguồn, phiên bản, ngày tải; checksum | Dữ liệu FAERS 2025 Q1–Q4 do FDA công bố. Ngày tải gốc chưa xác nhận; SHA-256 cần tính từ file đã xử lý. | [Nguồn dữ liệu FDA](https://fis.fda.gov/extensions/FPD-QDE-FAERS/FPD-QDE-FAERS.html) |
 | Giấy phép / DUA | FAERS là dữ liệu báo cáo biến cố bất lợi được công khai. Trang openFDA ghi giấy phép Public Domain/CC0; cần phân biệt với điều khoản của bộ file FAERS tải trực tiếp. | [Trang openFDA](https://open.fda.gov/data/faers/) |
-| Datasheet | Nhóm sử dụng báo cáo FAERS 2025 Q1–Q4, lọc tuổi ≥65, giữ phiên bản mới nhất theo caseid và xác định FALL từ REAC. Bộ dữ liệu cuối gồm 342.948 báo cáo. | Code lọc FAERS: bổ sung đường dẫn file thực tế |
-| Không có định danh bệnh nhân | Dữ liệu được tổ chức theo mã báo cáo caseid, không phải mã định danh bệnh nhân. Nhóm cần kiểm tra các cột trong file đầu ra trước khi xác nhận không có thông tin định danh trực tiếp. | Danh sách cột dữ liệu và kết quả kiểm tra |
+| Datasheet | Nhóm sử dụng báo cáo FAERS 2025 Q1–Q4, lọc tuổi ≥65, giữ phiên bản mới nhất theo caseid và xác định FALL từ REAC. Bộ dữ liệu cuối gồm 342.948 báo cáo. | [Datasheet FAERS](../data_docs/datasheet.md); code lọc FAERS gốc chưa có trong thư mục nộp |
+| Không có định danh bệnh nhân | Dữ liệu được tổ chức theo mã báo cáo caseid, không phải mã định danh bệnh nhân. Nhóm cần kiểm tra các cột trong file đầu ra trước khi xác nhận không có thông tin định danh trực tiếp. | [Datasheet FAERS — mục bảo mật](../data_docs/datasheet.md); chưa có kết quả kiểm tra từng cột được công bố |
 
 ### C2. Hướng dẫn báo cáo
 
 - **Câu hỏi nghiên cứu:** Việc bổ sung đặc trưng ACB và DDI có giúp cải thiện khả năng phân biệt các báo cáo FAERS của người ≥65 tuổi có ghi nhận FALL so với các báo cáo không ghi nhận FALL, so với mô hình nền dựa vào tuổi, giới và số thuốc?
 - **Hướng dẫn báo cáo:** Ưu tiên **TRIPOD+AI**, vì nhóm phát triển/đánh giá mô hình dự đoán/phân loại; không phải STARD-AI đánh giá xét nghiệm chẩn đoán hay DECIDE-AI đánh giá triển khai can thiệp trong thực hành. Cần đối chiếu mục 3.2 phụ lục thầy.
-- **Số mục checklist đáp ứng/tổng:** [CHƯA TỰ ĐỐI CHIẾU CHECKLIST, KHÔNG ĐIỀN SỐ GIẢ]. Thiếu rõ: T0, 95% CI, calibration, kiểm định ngoài, mô hình M3; cần rà tất cả mục theo phụ lục.
+- **Số mục checklist đáp ứng/tổng:** Chưa hoàn tất đối chiếu từng mục TRIPOD+AI, vì vậy chưa xác định số mục đáp ứng/tổng. Những điểm chưa đáp ứng hoặc cần kiểm tra gồm: T0, 95% CI, calibration, kiểm định ngoài, mô hình M3; cần rà tất cả mục theo phụ lục.
 - **Kết cục, nhãn, T0, biến có sẵn tại T0:** FALL=1 khi REAC có phản ứng FALL; FALL=0 nếu không có ghi nhận FALL; không xác định được T0 tiền biến cố rõ ràng từ dữ liệu hiện tại. Các biến tuổi/giới/số thuốc là thông tin tại thời điểm được báo cáo, chưa chứng minh đã có *trước* FALL.
 
 ### C3. PROBAST+AI — tự thẩm định
 
 | Miền | Nguy cơ sai lệch | Căn cứ trong repo | Việc sẽ làm để giảm nguy cơ |
 |---|---|---|---|
-| Người tham gia/nguồn | Cao hoặc không rõ — đánh giá sơ bộ | FAERS tự nguyện, thiếu đại diện cho toàn bộ người cao tuổi; [CẦN LINK] | Nêu phạm vi suy luận chỉ ở mức báo cáo, mô tả chọn/loại, thiếu dữ liệu |
+| Người tham gia/nguồn | Cao hoặc không rõ — đánh giá sơ bộ | FAERS tự nguyện, thiếu đại diện cho toàn bộ người cao tuổi; [Datasheet](../data_docs/datasheet.md) | Nêu phạm vi suy luận chỉ ở mức báo cáo, mô tả chọn/loại, thiếu dữ liệu |
 | Biến dự báo | Không rõ | Tuổi/giới/số thuốc; thời điểm trước kết cục chưa rõ; ACB/DDI chưa xác minh | Kiểm tra thời điểm thuốc, nguồn ánh xạ và độ bao phủ; hạn chế đặc trưng hậu biến cố |
 | Kết cục | Cao cho mục tiêu nguy cơ tương lai | Nhãn FALL từ REAC trong cùng báo cáo; T0 chưa có | Định nghĩa lại bài toán phân loại report-level; không tuyên bố dự đoán lâm sàng |
-| Phân tích | Không rõ | Chia 80/20 theo caseid, đã có tên script `chay_baseline.py` và tệp kết quả dự kiến; chưa đối chiếu code và fit preprocessing trên train/calibration/CI | Rà `chay_baseline.py`, kiểm tra thứ tự fit tiền xử lý, tập test bất biến; bootstrap CI/calibration |
+| Phân tích | Không rõ | Chia 80/20 theo caseid; đã có [code baseline](../code/chay_baseline.py), [báo cáo kết quả](../results/bao_cao_baseline.txt). Chưa đánh giá đầy đủ fit preprocessing, calibration và 95% CI | Rà `chay_baseline.py`, kiểm tra thứ tự fit tiền xử lý, tập test bất biến; bootstrap CI/calibration |
 
 **Tính áp dụng:** Chỉ trình bày như nghiên cứu khám phá liên hệ của thông tin thuốc với trạng thái có báo cáo FALL trong FAERS; chưa đủ điều kiện dùng để quyết định lâm sàng hay ước lượng nguy cơ té ngã tuyệt đối.
 
@@ -169,13 +180,13 @@ Baseline báo cáo ROC-AUC 0,6291 thấp hơn chỉ số công bố của Liu #3
 
 | Mục | Đạt / Chưa | Bằng chứng |
 |---|---|---|
-| Datasheet | Chưa xác minh | [CẦN FILE DATASHEET] |
+| Datasheet | Đã có bản mô tả, cần bổ sung xác minh một số trường | [Datasheet](../data_docs/datasheet.md) |
 | Phiên bản + checksum dữ liệu | Chưa | Q1–Q4 2025; thiếu checksum và ngày tải |
-| Không định danh; căn cứ được phép dùng | Chưa xác minh | [CẦN NGUỒN FDA / RÀ CỘT] |
+| Không định danh; căn cứ được phép dùng | Chưa hoàn tất rà soát dữ liệu đầu ra | [Nguồn FDA](https://www.fda.gov/drugs/surveillance/fda-adverse-event-reporting-system-faers); [Datasheet](../data_docs/datasheet.md); cần kiểm tra các trường dữ liệu |
 | Chọn đúng hướng dẫn + checklist | Chưa | Đề xuất TRIPOD+AI; chưa đối chiếu từng mục |
 | Định nghĩa kết cục, nhãn, T0 | Chưa đầy đủ | Có nhãn REAC FALL; không có T0 tiền biến cố |
 | Chia theo bệnh nhân; fit tiền xử lý chỉ train | Chưa xác minh | Chia theo caseid, không chứng minh patient-level / pipeline |
-| Mô hình mốc hồi quy logistic | Đã báo cáo; thiếu link | ROC-AUC 0,6291, AP 0,0551; cần URL `chay_baseline.py` và output |
+| Mô hình mốc hồi quy logistic | Đã có code và output | ROC-AUC 0,6291, AP 0,0551; [code](../code/chay_baseline.py), [output](../results/bao_cao_baseline.txt) |
 | AUC + calibration + Brier + 95% CI | Chưa | Chỉ có AUC/AP được báo cáo |
 | Cỡ mẫu và giới hạn áp dụng | Chưa đầy đủ | 342.948 báo cáo; FALL 10.499 (3,06%); cần phân tích sự kiện/mẫu và nguồn sai lệch |
 
@@ -183,4 +194,4 @@ Baseline báo cáo ROC-AUC 0,6291 thấp hơn chỉ số công bố của Liu #3
 
 | Công cụ | Dùng cho phần nào | Nhóm đã kiểm chứng lại bằng cách nào |
 |---|---|---|
-| ChatGPT (OpenAI) | Hỗ trợ tổ chức bảng y văn, soạn bản nháp A–D, giải thích PROBAST+AI, gợi ý khoảng trống và đối chiếu bài công bố | Đối chiếu DOI với trang nhà xuất bản/PubMed; nhóm **phải** kiểm tra nội dung từng bài và mọi số liệu repo trước khi nộp; phần còn thiếu đánh dấu rõ |
+| ChatGPT (OpenAI) | Hỗ trợ tổ chức bảng y văn, soạn bản nháp A–D, giải thích PROBAST+AI, gợi ý khoảng trống và đối chiếu bài công bố | Đối chiếu DOI và văn bản bài báo trên nhà xuất bản/PubMed; đối chiếu ROC-AUC và AP với [output baseline](../results/bao_cao_baseline.txt); các phần chưa có bằng chứng được trình bày là chưa hoàn thành |
