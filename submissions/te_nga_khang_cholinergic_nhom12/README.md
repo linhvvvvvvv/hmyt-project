@@ -1,10 +1,11 @@
+
 # N12 — Phân loại báo cáo FAERS có ghi nhận FALL ở người cao tuổi
 
 - **Mã đề tài:** 3.3 — `te_nga_khang_cholinergic`
 - **Mã nhóm:** `nhom12`
 - **Nhánh nộp:** `gd5-proposed-model`
 - **Fork bài nộp:** https://github.com/linhvvvvvvv/hmyt-project
-- **Repo dự án:** https://github.com/linhvvvvvvv/176336_N12_fall_risk_prediction
+- **Bài nộp và mã nguồn:** https://github.com/linhvvvvvvv/hmyt-project/tree/gd5-proposed-model/submissions/te_nga_khang_cholinergic_nhom12
 
 ## Thành viên và phân công
 
