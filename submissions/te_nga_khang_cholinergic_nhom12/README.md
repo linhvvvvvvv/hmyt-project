@@ -26,5 +26,3 @@
 ## Tình trạng tại mốc kiểm tra
 
 Bộ dữ liệu báo cáo FAERS 2025 Q1–Q4 gồm 342.948 báo cáo ≥65 tuổi; baseline Logistic Regression dùng tuổi, giới và số loại thuốc có ROC-AUC = 0,6291, AP = 0,0551. Nhóm đã có code tách hoạt chất và RxNorm; chưa hoàn thành đặc trưng ACB 2012, DDI hoặc mô hình kết hợp. Nhãn FALL chỉ thể hiện có ghi nhận phản ứng FALL trong báo cáo FAERS, không phải nguy cơ té ngã lâm sàng trong tương lai.
-
-**Lưu ý:** Thư mục `code/` và `results/` cần được giữ lại từ bản bài nộp đã upload trước đây; gói chỉnh sửa này không chứa lại các tệp đó.
